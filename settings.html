@@ -15,6 +15,7 @@
             background: linear-gradient(135deg, #150f2f, #23163e);
             font-family: 'Arial', sans-serif;
         }
+
         .settings-container {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
@@ -24,6 +25,7 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
+
         h2 {
             color: #fff;
             text-align: center;
@@ -31,28 +33,33 @@
             font-size: 24px;
             letter-spacing: 1px;
         }
+
         .setting-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin: 20px 0;
         }
+
         .setting-label {
             color: #e0e0e0;
             font-size: 16px;
             font-weight: 500;
         }
+
         .switch {
             position: relative;
             display: inline-block;
             width: 60px;
             height: 34px;
         }
+
         .switch input {
             opacity: 0;
             width: 0;
             height: 0;
         }
+
         .slider {
             position: absolute;
             cursor: pointer;
@@ -64,6 +71,7 @@
             transition: 0.4s;
             border-radius: 34px;
         }
+
         .slider:before {
             position: absolute;
             content: "";
@@ -76,12 +84,15 @@
             border-radius: 50%;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
+
         input:checked + .slider {
             background-color: #6600da;
         }
+
         input:checked + .slider:before {
             transform: translateX(26px);
         }
+
         .slider:hover {
             box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
         }
@@ -93,28 +104,28 @@
         <div class="setting-item">
             <span class="setting-label">Анимированный заголовок</span>
             <label class="switch">
-                <input type="checkbox" id="animated-title">
+                <input type="checkbox">
                 <span class="slider"></span>
             </label>
         </div>
         <div class="setting-item">
             <span class="setting-label">Анимация при запуске</span>
             <label class="switch">
-                <input type="checkbox" id="startup-animation">
+                <input type="checkbox">
                 <span class="slider"></span>
             </label>
         </div>
         <div class="setting-item">
             <span class="setting-label">Темная тема</span>
             <label class="switch">
-                <input type="checkbox" id="dark-theme">
+                <input type="checkbox">
                 <span class="slider"></span>
             </label>
         </div>
         <div class="setting-item">
             <span class="setting-label">Анимированный текст</span>
             <label class="switch">
-                <input type="checkbox" id="animated-text">
+                <input type="checkbox">
                 <span class="slider"></span>
             </label>
         </div>
