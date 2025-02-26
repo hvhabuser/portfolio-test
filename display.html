@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Отображение</title>
+</head>
+<body>
+    <h1>Текст с другой страницы</h1>
+    <p id="displayText">Здесь будет отображаться текст...</p>
+
+    <script>
+        // Функция для обновления текста
+        function updateText() {
+            const text = localStorage.getItem('sharedText') || 'Текст ещё не введён';
+            document.getElementById('displayText').innerText = text;
+        }
+
+        // Обновляем текст при загрузке страницы
+        window.onload = updateText;
+
+        // Можно добавить автоматическое обновление каждые несколько секунд
+        setInterval(updateText, 2000); // Обновление каждые 2 секунды
+    </script>
+</body>
+</html>

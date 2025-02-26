@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Настройки</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #150f2f, #23163e);
+            font-family: 'Arial', sans-serif;
+        }
+        .settings-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            width: 400px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        h2 {
+            color: #fff;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 24px;
+            letter-spacing: 1px;
+        }
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+        }
+        .setting-label {
+            color: #e0e0e0;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        input:checked + .slider {
+            background-color: #6600da;
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        .slider:hover {
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="settings-container">
+        <h2>Настройки</h2>
+        <div class="setting-item">
+            <span class="setting-label">Анимированный заголовок</span>
+            <label class="switch">
+                <input type="checkbox" id="animated-title">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="setting-item">
+            <span class="setting-label">Анимация при запуске</span>
+            <label class="switch">
+                <input type="checkbox" id="startup-animation">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="setting-item">
+            <span class="setting-label">Темная тема</span>
+            <label class="switch">
+                <input type="checkbox" id="dark-theme">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="setting-item">
+            <span class="setting-label">Анимированный текст</span>
+            <label class="switch">
+                <input type="checkbox" id="animated-text">
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+
+    <!-- Подключение Firebase -->
+    <script type="module">
+        // Импорт функций из Firebase SDK
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js';
+        import { getDatabase, ref, onValue, update } from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js';
+
+        // Ваша конфигурация Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDBhUqQbS47_VLcgN5ZbW1dU-p_2r1V3VE",
+            authDomain: "portfolio-7c7d7.firebaseapp.com",
+            databaseURL: "https://portfolio-7c7d7-default-rtdb.firebaseio.com",
+            projectId: "portfolio-7c7d7",
+            storageBucket: "portfolio-7c7d7.firebasestorage.app",
+            messagingSenderId: "257227420063",
+            appId: "1:257227420063:web:c43d867b13ddcac0858daa",
+            measurementId: "G-DMESHY2CGX"
+        };
+
+        // Инициализация Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Функция для обновления состояния переключателя
+        function updateSwitch(id, value) {
+            document.getElementById(id).checked = value;
+        }
+
+        // Чтение настроек из Firebase
+        const settingsRef = ref(db, 'settings');
+        onValue(settingsRef, (snapshot) => {
+            const data = snapshot.val() || {};
+            updateSwitch('animated-title', data.animatedTitle || false);
+            updateSwitch('startup-animation', data.startupAnimation || false);
+            updateSwitch('dark-theme', data.darkTheme || false);
+            updateSwitch('animated-text', data.animatedText || false);
+        });
+
+        // Запись изменений в Firebase
+        document.querySelectorAll('.switch input').forEach(input => {
+            input.addEventListener('change', () => {
+                const settingName = input.id.replace('-', '');
+                const updates = {};
+                updates[settingName] = input.checked;
+                update(settingsRef, updates)
+                    .then(() => console.log('Настройка обновлена'))
+                    .catch((error) => console.error('Ошибка:', error));
+            });
+        });
+    </script>
+</body>
+</html>
