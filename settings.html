@@ -142,36 +142,40 @@
         const db = getDatabase(app);
         const settingsRef = ref(db, 'settings');
 
-        // Функция для обновления состояния одного переключателя
+        // Функция для обновления переключателя
         function updateSwitch(id, value) {
             const switchElement = document.getElementById(id);
             if (switchElement) {
-                switchElement.checked = value;
+                switchElement.checked = value === true; // Явное сравнение с true
+                console.log(`Обновлен ${id} на ${value}`); // Отладка
             }
         }
 
-        // Чтение настроек из Firebase
+        // Чтение данных из Firebase
         onValue(settingsRef, (snapshot) => {
             const data = snapshot.val() || {};
-            console.log('Получены данные из Firebase:', data); // Для отладки
-            updateSwitch('animated-title', data.animatedTitle === true);
-            updateSwitch('startup-animation', data.startupAnimation === true);
-            updateSwitch('dark-theme', data.darkTheme === true);
-            updateSwitch('animated-text', data.animatedText === true);
+            console.log('Данные из Firebase:', data); // Проверка, что приходит
+
+            // Устанавливаем значения для каждого переключателя
+            updateSwitch('animated-title', data.animatedTitle);
+            updateSwitch('startup-animation', data.startupAnimation);
+            updateSwitch('dark-theme', data.darkTheme);
+            updateSwitch('animated-text', data.animatedText);
         }, (error) => {
-            console.error('Ошибка чтения данных:', error);
+            console.error('Ошибка чтения Firebase:', error);
         });
 
         // Запись изменений в Firebase
         document.querySelectorAll('.switch input').forEach(input => {
             input.addEventListener('change', () => {
-                const settingName = input.id.replace('-', '');
+                const settingName = input.id.replace('-', ''); // Преобразуем animated-title в animatedTitle
                 const updates = {};
-                updates[settingName] = input.checked;
-                console.log(`Отправка в Firebase: ${settingName} = ${input.checked}`); // Для отладки
+                updates[settingName] = input.checked; // Отправляем только текущее значение
+                console.log(`Отправка в Firebase: ${settingName} = ${input.checked}`);
+
                 update(settingsRef, updates)
-                    .then(() => console.log(`Успешно обновлено: ${settingName}`))
-                    .catch((error) => console.error('Ошибка обновления:', error));
+                    .then(() => console.log(`Успешно обновлено: ${settingName} = ${input.checked}`))
+                    .catch((error) => console.error('Ошибка записи:', error));
             });
         });
     </script>
